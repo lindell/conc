@@ -111,11 +111,17 @@ func Map[TYPE any, RET any](
 
 	// Wait for either all the final go-routines to finish, an error, or context cancellation
 	select {
-	case <-wgWait:
-		return ret, nil
 	case err := <-errChan:
 		return nil, err
 	case <-ctx.Done():
 		return nil, ctx.Err()
+	case <-wgWait:
+		// Since select statements isn't deterministic, we need to ensure that no error was actually exist in the errChan
+		select {
+		case err := <-errChan:
+			return nil, err
+		default:
+		}
+		return ret, nil
 	}
 }
