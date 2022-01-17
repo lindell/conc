@@ -1,6 +1,6 @@
 conc
 ----
-Conc is a package to help with 
+Conc is a package to help with concurrent operations in Go. Works with Go1.18 generics.
 
 ## Map
 
